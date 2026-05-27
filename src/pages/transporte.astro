@@ -1,0 +1,13 @@
+---
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import { TransportationLeastCostExplorer } from "../components/TransportationLeastCostExplorer";
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="Transporte"
+	description="Solución paso a paso del método de costo mínimo para problemas de transporte."
+>
+	<TransportationLeastCostExplorer client:load />
+</BaseLayout>

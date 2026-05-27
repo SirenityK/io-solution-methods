@@ -1,0 +1,13 @@
+---
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import { SimplexExplorer } from "../components/SimplexExplorer";
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="Simplex tabular"
+	description="Solución paso a paso del método simplex tabular para problemas de investigación de operaciones."
+>
+	<SimplexExplorer client:load />
+</BaseLayout>

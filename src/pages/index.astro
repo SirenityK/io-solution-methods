@@ -1,17 +1,102 @@
 ---
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import BaseLayout from "../layouts/BaseLayout.astro";
 
+const _algorithms = [
+	{
+		name: "Transporte",
+		href: "/transporte",
+		summary:
+			"Balanceo de oferta y demanda, Esquina Noroeste, Costo Mínimo, Aproximación de Vogel y optimización MODI.",
+		details: ["Asignaciones iniciales", "Ciclos y degeneración", "Costo total"],
+		status: "Lógica lista en src/lib",
+	},
+	{
+		name: "Simplex tabular",
+		href: "/simplex",
+		summary:
+			"Iteraciones por tabla, selección de pivote, utilidades relativas, detección de no acotamiento y soluciones alternas.",
+		details: ["Base inicial", "Tablas por iteración", "Valor objetivo"],
+		status: "Lógica lista en src/lib",
+	},
+] as const;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+	title="Inicio"
+	description="Métodos de solución de investigación de operaciones para clase TecNM, con rutas preparadas para transporte y simplex."
+>
+	<section class="hero bg-base-200">
+		<div class="hero-content max-w-6xl flex-col gap-8 py-12 lg:flex-row lg:py-16">
+			<div>
+				<div class="badge badge-primary badge-outline">Investigación de operaciones</div>
+				<h1 class="py-6 text-5xl font-bold">Soluciones guiadas para métodos clásicos de IO.</h1>
+				<p class="max-w-2xl text-lg">
+					Este sitio reúne procedimientos detallados en español (MX), pensados para seguir
+					cada decisión de los algoritmos con datos estructurados desde TypeScript.
+				</p>
+				<a class="btn btn-primary mt-6" href="#algoritmos">Ver algoritmos</a>
+			</div>
+
+			<div class="card bg-base-100 shadow-xl">
+				<div class="card-body">
+					<div class="stats stats-vertical bg-base-200 lg:stats-horizontal">
+						<div class="stat">
+							<div class="stat-value text-primary">2</div>
+							<div class="stat-title">algoritmos</div>
+						</div>
+						<div class="stat">
+							<div class="stat-value text-secondary">TS</div>
+							<div class="stat-title">lógica pura</div>
+						</div>
+						<div class="stat">
+							<div class="stat-value text-accent">MX</div>
+							<div class="stat-title">narrativa</div>
+						</div>
+					</div>
+					<div class="divider"></div>
+					<p>
+						Las páginas de solución se conectarán a <code>src/lib</code> para presentar
+						resultados, pasos e iteraciones sin duplicar cálculos en componentes.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="algoritmos" class="mx-auto max-w-6xl px-4 py-12">
+		<h2 class="text-3xl font-bold">Algoritmos implementados</h2>
+		<p class="max-w-2xl py-4">
+			Cada ruta abre una experiencia interactiva conectada a la lógica pura de
+			<code>src/lib</code>, con tablas editables y explicaciones paso a paso.
+		</p>
+
+		<div class="grid gap-4 md:grid-cols-2">
+			{
+				_algorithms.map((algorithm) => (
+					<article class="card card-border bg-base-100">
+						<div class="card-body">
+							<div class="badge badge-primary badge-soft">{algorithm.status}</div>
+							<h3 class="card-title">{algorithm.name}</h3>
+							<p>{algorithm.summary}</p>
+							<div class="card-actions items-center justify-between pt-4">
+								<div class="flex flex-wrap gap-2">
+									{algorithm.details.map((detail) => (
+										<span class="badge badge-outline">{detail}</span>
+									))}
+								</div>
+								<a
+									class="btn btn-primary btn-square btn-sm"
+									href={algorithm.href}
+									aria-label={`Abrir ${algorithm.name}`}
+								>
+									<span aria-hidden="true">→</span>
+								</a>
+							</div>
+						</div>
+					</article>
+				))
+			}
+		</div>
+	</section>
+</BaseLayout>

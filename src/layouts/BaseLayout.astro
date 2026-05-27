@@ -1,0 +1,60 @@
+---
+import "../styles/global.css";
+
+type Props = {
+	title: string;
+	description?: string;
+};
+
+const {
+	title: _title,
+	description:
+		_description = "Métodos de solución de investigación de operaciones con procedimientos detallados paso a paso.",
+} = Astro.props;
+
+const _pageTitle = `${_title} | Métodos de solución IO`;
+---
+
+<!doctype html>
+<html lang="es-MX">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={_description} />
+		<meta name="generator" content={Astro.generator} />
+		<title>{_pageTitle}</title>
+	</head>
+	<body>
+		<div class="min-h-screen bg-base-100">
+			<header class="bg-base-100 shadow-sm">
+				<nav class="navbar mx-auto max-w-6xl" aria-label="Navegación principal">
+					<div class="navbar-start">
+						<a class="btn btn-ghost text-lg" href="/">
+							<span class="badge badge-primary badge-lg">IO</span>
+							<span>Métodos IO</span>
+						</a>
+					</div>
+					<div class="navbar-end">
+						<ul class="menu menu-horizontal">
+							<li><a href="/transporte">Transporte</a></li>
+							<li><a href="/simplex">Simplex</a></li>
+						</ul>
+					</div>
+				</nav>
+			</header>
+			<main>
+				<slot />
+			</main>
+			<footer class="footer footer-horizontal footer-center bg-base-200 text-base-content p-6">
+				<aside>
+					<p>
+						Investigación de operaciones con explicaciones paso a paso. Contenido en
+						español (MX).
+					</p>
+				</aside>
+			</footer>
+		</div>
+	</body>
+</html>
