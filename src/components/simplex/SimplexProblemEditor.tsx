@@ -1,4 +1,5 @@
 import { Index } from "solid-js";
+import { Katex } from "../katex";
 import type { EditableSimplexProblem } from "./types";
 
 type SimplexProblemEditorProps = Readonly<{
@@ -122,7 +123,9 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 											</td>
 										)}
 									</Index>
-									<td class="text-center font-semibold">{"<="}</td>
+									<td class="text-center font-semibold">
+										<Katex math="\le"/>
+									</td>
 									<td>
 										<input
 											type="number"

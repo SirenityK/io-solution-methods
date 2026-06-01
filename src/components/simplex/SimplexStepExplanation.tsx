@@ -11,6 +11,26 @@ type SimplexStepExplanationProps = Readonly<{
 	solution: SimplexTableauSolution;
 }>;
 
+const getConstraintRows = (iteration: SimplexTableauIteration) =>
+	iteration.tableauBefore.filter((row) => !row.isObjective);
+
+const getRowLabel = (
+	row: number,
+	iteration: SimplexTableauIteration,
+): string =>
+	iteration.tableauBefore[row]?.isObjective ? "fila objetivo" : `R${row + 1}`;
+
+const getOperationReason = (
+	operation: SimplexTableauIteration["rowOperations"][number],
+	iteration: SimplexTableauIteration,
+): string => {
+	if (operation.kind === "normalize") {
+		return `El pivote vale ${formatNumber(operation.sourceCoefficient)}, así que ${operation.description} para convertirlo en 1.`;
+	}
+	const action = operation.sourceCoefficient > 0 ? "resta" : "suma";
+	return `En ${getRowLabel(operation.row, iteration)} hay ${formatNumber(operation.sourceCoefficient)} en la columna pivote; se ${action} un múltiplo de R${operation.pivotRow + 1} para dejar ese valor en 0.`;
+};
+
 export const SimplexStepExplanation = (props: SimplexStepExplanationProps) => (
 	<div class="card bg-base-200">
 		<div class="card-body gap-4">
@@ -42,8 +62,9 @@ export const SimplexStepExplanation = (props: SimplexStepExplanationProps) => (
 				{(iteration) => (
 					<div class="space-y-3">
 						<p>
-							Se revisa la fila objetivo. La columna pivote es el indicador más
-							negativo; si ya no hay negativos, el tableau es óptimo.
+							Se revisa la fila objetivo. Para maximizar, una entrada negativa
+							todavía permite mejorar; por eso se busca el indicador más
+							negativo.
 						</p>
 
 						<div class="rounded-box bg-base-100 p-3">
@@ -71,41 +92,112 @@ export const SimplexStepExplanation = (props: SimplexStepExplanationProps) => (
 						<Show
 							when={iteration().pivot}
 							fallback={
-								<p>
-									{props.solution.status === "unbounded"
-										? "No hay cocientes positivos en la columna pivote, así que el problema es no acotado."
-										: "Como no quedan indicadores negativos, se leen las variables básicas desde la columna B."}
-								</p>
+								<div class="space-y-3">
+									<p>
+										{props.solution.status === "unbounded"
+											? "Hay un indicador negativo, pero en su columna no aparece ningún coeficiente positivo en las restricciones. No se puede escoger fila pivote, así que el problema es no acotado."
+											: "No queda ningún indicador negativo en la fila objetivo. Eso significa que ninguna variable puede entrar para mejorar más el valor de la función objetivo."}
+									</p>
+									<Show when={props.solution.status === "optimal"}>
+										<div class="rounded-box bg-base-100 p-3">
+											<div class="text-sm font-semibold">
+												Lectura de variables básicas
+											</div>
+											<ul class="mt-2 space-y-1 text-sm">
+												<For
+													each={props.solution.variables.filter(
+														(variable) => variable.isBasic,
+													)}
+												>
+													{(variable) => (
+														<li>
+															{variable.name} tiene columna identidad y se lee
+															como {formatNumber(variable.value)} en B.
+														</li>
+													)}
+												</For>
+											</ul>
+										</div>
+									</Show>
+								</div>
 							}
 						>
 							{(pivot) => (
 								<>
 									<p>
-										Entra {pivot().enteringVariable} y sale{" "}
-										{pivot().leavingVariable}. El elemento pivote es{" "}
-										{formatNumber(pivot().value)}, ubicado en la fila{" "}
-										{pivot().row + 1}.
+										El indicador más negativo es{" "}
+										{formatNumber(
+											iteration().objectiveIndicators[pivot().column] ?? 0,
+										)}{" "}
+										en la columna {pivot().enteringVariable}; por eso esa
+										variable entra a la base.
 									</p>
 
 									<div class="rounded-box bg-base-100 p-3">
-										<div class="text-sm font-semibold">Prueba de cocientes</div>
+										<div class="text-sm font-semibold">
+											Prueba de cocientes para elegir fila
+										</div>
+										<p class="mt-2 text-sm text-base-content/75">
+											Se divide cada valor de B entre el coeficiente positivo de
+											la columna {pivot().enteringVariable}. Los coeficientes
+											cero o negativos no participan porque no limitan el
+											avance.
+										</p>
 										<div class="mt-2 space-y-2 text-sm">
-											<For each={iteration().ratios}>
-												{(ratio, row) => (
-													<div class="flex items-center justify-between gap-3">
-														<span>R{row() + 1}</span>
-														<span
-															class="badge"
-															classList={{
-																"badge-warning": pivot().row === row(),
-																"badge-ghost": pivot().row !== row(),
-															}}
-														>
-															{ratio === null
-																? "No aplica"
-																: formatNumber(ratio)}
-														</span>
-													</div>
+											<For each={getConstraintRows(iteration())}>
+												{(row, rowIndex) => {
+													const coefficient = row.values[pivot().column] ?? 0;
+													const ratio = iteration().ratios[rowIndex()];
+													return (
+														<div class="flex items-center justify-between gap-3">
+															<span>
+																R{rowIndex() + 1}: {formatNumber(row.rhs)} /{" "}
+																{formatNumber(coefficient)}
+															</span>
+															<span
+																class="badge"
+																classList={{
+																	"badge-warning": pivot().row === rowIndex(),
+																	"badge-ghost": pivot().row !== rowIndex(),
+																}}
+															>
+																{ratio === null
+																	? "No aplica"
+																	: formatNumber(ratio)}
+															</span>
+														</div>
+													);
+												}}
+											</For>
+										</div>
+										<p class="mt-3 text-sm">
+											El menor cociente positivo es{" "}
+											{formatNumber(iteration().ratios[pivot().row] ?? 0)} en R
+											{pivot().row + 1}; por eso sale {pivot().leavingVariable}.
+											El pivote es la intersección de esa fila con la columna{" "}
+											{pivot().enteringVariable}: {formatNumber(pivot().value)}.
+										</p>
+									</div>
+
+									<div class="rounded-box bg-base-100 p-3">
+										<div class="text-sm font-semibold">
+											Normalizar la fila pivote
+										</div>
+										<p class="mt-2 text-sm">
+											La fila pivote se divide entre{" "}
+											{formatNumber(pivot().value)} para que el pivote se
+											convierta en 1. Esa fila será la nueva fila básica de{" "}
+											{pivot().enteringVariable}.
+										</p>
+										<div class="mt-2 flex flex-wrap gap-2">
+											<For each={iteration().normalizedPivotRow ?? []}>
+												{(value, column) => (
+													<span class="badge badge-ghost">
+														{column() < props.solution.columns.length
+															? props.solution.columns[column()]
+															: "B"}
+														: {formatNumber(value)}
+													</span>
 												)}
 											</For>
 										</div>
@@ -113,13 +205,34 @@ export const SimplexStepExplanation = (props: SimplexStepExplanationProps) => (
 
 									<div class="rounded-box bg-base-100 p-3">
 										<div class="text-sm font-semibold">
-											Operaciones por fila
+											Hacer ceros en la columna pivote
 										</div>
-										<ul class="mt-2 space-y-1 text-sm">
+										<p class="mt-2 text-sm text-base-content/75">
+											La meta es que la columna {pivot().enteringVariable} quede
+											como columna identidad: 1 en la fila pivote y 0 en las
+											demás filas.
+										</p>
+										<ul class="mt-2 space-y-2 text-sm">
 											<For each={iteration().rowOperations}>
-												{(operation) => <li>{operation.description}</li>}
+												{(operation) => (
+													<li>
+														<div class="font-semibold">
+															{operation.description}
+														</div>
+														<div class="text-base-content/75">
+															{getOperationReason(operation, iteration())}
+														</div>
+													</li>
+												)}
 											</For>
 										</ul>
+									</div>
+
+									<div class="alert alert-success alert-soft">
+										<span>
+											Después de estas operaciones se obtiene el tableau
+											actualizado que aparece a la izquierda.
+										</span>
 									</div>
 								</>
 							)}

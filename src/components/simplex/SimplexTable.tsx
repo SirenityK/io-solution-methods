@@ -1,11 +1,13 @@
 import { For } from "solid-js";
-import type { SimplexTableauRow } from "../../lib";
+import type { SimplexCellTransformation, SimplexTableauRow } from "../../lib";
 
 type SimplexTableProps = Readonly<{
 	title: string;
 	columns: readonly string[];
 	rows: readonly SimplexTableauRow[];
 	ratios?: readonly (number | null)[];
+	ratioRows?: readonly SimplexTableauRow[];
+	cellTransformations?: readonly SimplexCellTransformation[];
 	pivot?: Readonly<{ row: number; column: number; value: number }>;
 	enteringColumn?: number;
 	leavingRow?: number;
@@ -32,6 +34,57 @@ export const formatNumber = (value: number): string => {
 		maximumFractionDigits: 3,
 		minimumFractionDigits: 0,
 	});
+};
+
+const getCellTransformation = (
+	transformations: readonly SimplexCellTransformation[] | undefined,
+	row: number,
+	column: number | "rhs",
+): SimplexCellTransformation | undefined =>
+	transformations?.find(
+		(transformation) =>
+			transformation.row === row &&
+			transformation.column === column &&
+			transformation.changed,
+	);
+
+const CopyableMoveRight = () => (
+	<>
+		<span class="sr-only"> -&gt; </span>
+		<svg
+			aria-hidden="true"
+			class="text-base-content/45 size-4"
+			fill="none"
+			stroke="currentColor"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			stroke-width="2"
+			viewBox="0 0 24 24"
+		>
+			<path d="M18 8L22 12L18 16" />
+			<path d="M2 12H22" />
+		</svg>
+	</>
+);
+
+const renderTransformation = (transformation: SimplexCellTransformation) => {
+	const calculation = transformation.calculation;
+	const formula =
+		calculation.kind === "divide"
+			? `${formatNumber(transformation.before)} / ${formatNumber(calculation.divisor)}`
+			: `${formatNumber(transformation.before)} ${
+					calculation.multiplier > 0 ? "-" : "+"
+				} ${formatNumber(Math.abs(calculation.multiplier))}(${formatNumber(calculation.pivotValue)})`;
+
+	return (
+		<div class="flex justify-center min-w-28 whitespace-nowrap items-center gap-1 leading-tight">
+			<span class="text-info text-xs">{formula}</span>
+			<CopyableMoveRight />
+			<span class="text-success text-sm font-bold">
+				{formatNumber(transformation.after)}
+			</span>
+		</div>
+	);
 };
 
 export const SimplexTable = (props: SimplexTableProps) => (
@@ -89,31 +142,89 @@ export const SimplexTable = (props: SimplexTableProps) => (
 											const isPivot = () =>
 												props.pivot?.row === rowIndex() &&
 												props.pivot.column === columnIndex();
+											const transformation = () =>
+												getCellTransformation(
+													props.cellTransformations,
+													rowIndex(),
+													columnIndex(),
+												);
 											return (
 												<td
 													class="text-center font-mono"
 													classList={{
+														"align-middle": transformation() !== undefined,
 														"bg-primary text-primary-content font-bold":
 															isPivot(),
+														"bg-info/10":
+															transformation() !== undefined && !isPivot(),
 														"bg-primary/15":
 															props.enteringColumn === columnIndex() &&
-															!isPivot(),
+															!isPivot() &&
+															transformation() === undefined,
 													}}
 												>
-													{formatNumber(row.values[columnIndex()] ?? 0)}
+													{transformation()
+														? renderTransformation(
+																transformation() as SimplexCellTransformation,
+															)
+														: formatNumber(row.values[columnIndex()] ?? 0)}
 												</td>
 											);
 										}}
 									</For>
-									<td class="text-center font-mono font-semibold">
-										{formatNumber(row.rhs)}
+									<td
+										class="text-center font-mono font-semibold"
+										classList={{
+											"bg-info/10":
+												getCellTransformation(
+													props.cellTransformations,
+													rowIndex(),
+													"rhs",
+												) !== undefined,
+										}}
+									>
+										{(() => {
+											const transformation = getCellTransformation(
+												props.cellTransformations,
+												rowIndex(),
+												"rhs",
+											);
+											return transformation
+												? renderTransformation(transformation)
+												: formatNumber(row.rhs);
+										})()}
 									</td>
 									<td class="text-center font-mono">
-										{row.isObjective ||
-										props.ratios?.[rowIndex()] === null ||
-										props.ratios?.[rowIndex()] === undefined
-											? "-"
-											: formatNumber(props.ratios[rowIndex()] ?? 0)}
+										{(() => {
+											const ratio = props.ratios?.[rowIndex()];
+											const sourceRow = props.ratioRows?.[rowIndex()] ?? row;
+											const coefficient =
+												sourceRow.values[props.enteringColumn ?? 0] ?? 0;
+											if (
+												row.isObjective ||
+												ratio === null ||
+												ratio === undefined
+											) {
+												return "-";
+											}
+											return (
+												<div class="flex min-w-24 items-center gap-1 whitespace-nowrap justify-center">
+													<span class="text-info text-xs">
+														{formatNumber(sourceRow.rhs)} /{" "}
+														{formatNumber(coefficient)}
+													</span>
+													<CopyableMoveRight />
+													<span
+														class="text-sm font-bold"
+														classList={{
+															"text-success": props.leavingRow === rowIndex(),
+														}}
+													>
+														{formatNumber(ratio)}
+													</span>
+												</div>
+											);
+										})()}
 									</td>
 								</tr>
 							)}

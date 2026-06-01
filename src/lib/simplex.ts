@@ -62,9 +62,29 @@ export type SimplexTableauRow = Readonly<{
 	isObjective: boolean;
 }>;
 
+export type SimplexTableauCellColumn = number | "rhs";
+
+export type SimplexCellCalculation =
+	| Readonly<{ kind: "divide"; divisor: number }>
+	| Readonly<{ kind: "eliminate"; multiplier: number; pivotValue: number }>;
+
+export type SimplexCellTransformation = Readonly<{
+	row: number;
+	column: SimplexTableauCellColumn;
+	before: number;
+	after: number;
+	changed: boolean;
+	calculation: SimplexCellCalculation;
+}>;
+
 export type SimplexRowOperation = Readonly<{
+	kind: "normalize" | "eliminate";
 	row: number;
 	label: string;
+	pivotRow: number;
+	sourceCoefficient: number;
+	multiplier: number;
+	cells: readonly SimplexCellTransformation[];
 	description: string;
 }>;
 
@@ -189,6 +209,38 @@ const cloneTableau = (
 		rhs: row.rhs,
 		isObjective: row.isObjective,
 	}));
+
+const hasChangedValue = (before: number, after: number): boolean =>
+	Math.abs(before - after) > 1e-10;
+
+const createCellTransformations = (
+	row: number,
+	beforeValues: readonly number[],
+	beforeRhs: number,
+	afterValues: readonly number[],
+	afterRhs: number,
+	calculation: SimplexCellCalculation,
+): SimplexCellTransformation[] => [
+	...beforeValues.map((before, column) => {
+		const after = afterValues[column] ?? 0;
+		return {
+			row,
+			column,
+			before,
+			after,
+			changed: hasChangedValue(before, after),
+			calculation,
+		};
+	}),
+	{
+		row,
+		column: "rhs" as const,
+		before: beforeRhs,
+		after: afterRhs,
+		changed: hasChangedValue(beforeRhs, afterRhs),
+		calculation,
+	},
+];
 
 const validateSimplexTableauInput = (input: SimplexTableauInput): void => {
 	assertRectangularMatrix(input.constraints, "constraints");
@@ -428,8 +480,20 @@ export const solveSimplexTableau = (
 
 		const rowOperations: SimplexRowOperation[] = [
 			{
+				kind: "normalize",
 				row: leavingRow,
 				label: `R${leavingRow + 1}`,
+				pivotRow: leavingRow,
+				sourceCoefficient: pivot,
+				multiplier: 1 / pivot,
+				cells: createCellTransformations(
+					leavingRow,
+					pivotRowBefore?.values ?? [],
+					pivotRowBefore?.rhs ?? 0,
+					normalizedValues,
+					normalizedRhs,
+					{ kind: "divide", divisor: pivot },
+				),
 				description: `R${leavingRow + 1} / ${pivot}`,
 			},
 		];
@@ -443,6 +507,8 @@ export const solveSimplexTableau = (
 			if (multiplier === 0) {
 				continue;
 			}
+			const rowBeforeValues = [...(tableau[row]?.values ?? [])];
+			const rowBeforeRhs = tableau[row]?.rhs ?? 0;
 			const nextValues =
 				tableau[row]?.values.map((value, column) =>
 					roundNearZero(value - multiplier * (pivotRow.values[column] ?? 0)),
@@ -457,8 +523,24 @@ export const solveSimplexTableau = (
 			};
 			const operationSign = multiplier > 0 ? "-" : "+";
 			rowOperations.push({
+				kind: "eliminate",
 				row,
 				label: tableau[row]?.isObjective ? "Objetivo" : `R${row + 1}`,
+				pivotRow: leavingRow,
+				sourceCoefficient: multiplier,
+				multiplier,
+				cells: createCellTransformations(
+					row,
+					rowBeforeValues,
+					rowBeforeRhs,
+					nextValues,
+					nextRhs,
+					{
+						kind: "eliminate",
+						multiplier,
+						pivotValue: pivotRow.values[enteringColumn] ?? 0,
+					},
+				),
 				description: `R${row + 1} ${operationSign} ${Math.abs(multiplier)}R${leavingRow + 1}`,
 			});
 		}

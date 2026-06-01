@@ -30,6 +30,70 @@ describe("solveSimplexTableau", () => {
 		expect(result.iterations[0]?.tableauAfter?.map((row) => row.rhs)).toEqual([
 			4, 1, 6, 240,
 		]);
+		expect(
+			result.iterations[0]?.rowOperations.map((operation) => ({
+				kind: operation.kind,
+				row: operation.row,
+				label: operation.label,
+				pivotRow: operation.pivotRow,
+				sourceCoefficient: operation.sourceCoefficient,
+				multiplier: operation.multiplier,
+				description: operation.description,
+			})),
+		).toEqual([
+			{
+				kind: "normalize",
+				row: 2,
+				label: "R3",
+				pivotRow: 2,
+				sourceCoefficient: 2,
+				multiplier: 0.5,
+				description: "R3 / 2",
+			},
+			{
+				kind: "eliminate",
+				row: 0,
+				label: "R1",
+				pivotRow: 2,
+				sourceCoefficient: 1,
+				multiplier: 1,
+				description: "R1 - 1R3",
+			},
+			{
+				kind: "eliminate",
+				row: 1,
+				label: "R2",
+				pivotRow: 2,
+				sourceCoefficient: 1,
+				multiplier: 1,
+				description: "R2 - 1R3",
+			},
+			{
+				kind: "eliminate",
+				row: 3,
+				label: "Objetivo",
+				pivotRow: 2,
+				sourceCoefficient: -40,
+				multiplier: -40,
+				description: "R4 + 40R3",
+			},
+		]);
+		expect(result.iterations[0]?.rowOperations[0]?.cells).toContainEqual({
+			row: 2,
+			column: "rhs",
+			before: 12,
+			after: 6,
+			changed: true,
+			calculation: { kind: "divide", divisor: 2 },
+		});
+		expect(result.iterations[0]?.rowOperations[3]?.cells).toContainEqual({
+			row: 3,
+			column: "rhs",
+			before: 0,
+			after: 240,
+			changed: true,
+			calculation: { kind: "eliminate", multiplier: -40, pivotValue: 1 },
+		});
 		expect(result.iterations[1]?.pivot).toEqual({
 			row: 1,
 			column: 0,

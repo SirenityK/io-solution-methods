@@ -228,6 +228,10 @@ export const SimplexExplorer = () => {
 								columns={solution().columns}
 								rows={displayedRows()}
 								ratios={currentIteration()?.ratios}
+								ratioRows={currentIteration()?.tableauBefore}
+								cellTransformations={currentIteration()?.rowOperations.flatMap(
+									(operation) => operation.cells,
+								)}
 								pivot={currentIteration()?.pivot}
 								enteringColumn={currentIteration()?.pivot?.column}
 								leavingRow={currentIteration()?.pivot?.row}
