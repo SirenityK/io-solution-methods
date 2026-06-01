@@ -19,6 +19,14 @@ The current library includes these base algorithms:
 
 When building frontend step-by-step pages, consume the structured outputs from `src/lib` and transform them into Spanish explanations. Do not duplicate calculations in components. Components may format, label, highlight, and narrate, but algorithm decisions must stay inside `src/lib`.
 
+## Math notation and KaTeX rendering
+
+Use KaTeX for mathematical notation shown in the frontend, especially formulas, inequalities, ratios, objective functions, row operations, and symbolic transformations used in simplex or transportation explanations.
+
+The shared Solid component for this is `src/components/katex.tsx`. Prefer that component instead of writing raw HTML, manually assembling KaTeX markup, or using plain text approximations when the content is mathematical. Keep the math source as concise LaTeX strings at the presentation layer and continue to keep algorithm decisions, numeric values, pivots, traces, and derived results in `src/lib`.
+
+KaTeX is for rendering only. Components may decide how to display a formula, but they must not use KaTeX strings as the source of truth for calculations or parse rendered math to recover values. When a step explanation needs a formula that depends on algorithm output, build the displayed LaTeX from the typed structured data returned by `src/lib`.
+
 ## Transportation step-by-step UI architecture
 
 The accepted baseline for `/transporte` is the current transportation page with Least Cost, Northwest Corner, and Vogel Approximation. Future transportation algorithms should reuse the same layout and component architecture instead of creating separate page structures.
