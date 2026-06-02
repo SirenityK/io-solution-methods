@@ -1,43 +1,62 @@
-# Astro Starter Kit: Minimal
+# IO Solution Methods — Métodos de Solución de Investigación de Operaciones
 
-```sh
-bun create astro@latest -- --template minimal
+Interactive educational static site for Operations Research solution methods, built for TecNM. Explains transportation problem algorithms, the simplex method, and the graphical LP method step-by-step in Spanish (MX).
+
+## Tech Stack
+
+| Technology | Role |
+|---|---|
+| **Astro** 6 | Static site generation |
+| **SolidJS** 1.9 | Reactive frontend components |
+| **TailwindCSS** 4 + **DaisyUI** 5 | Styling and UI components |
+| **KaTeX** 0.17 | Mathematical notation rendering |
+| **D3.js** 7 | SVG plots (graphical LP) |
+| **BiomeJS** 2 | Linting, formatting, and checking |
+| **Bun** | Package manager, dev server, test runner |
+
+## Algorithms
+
+- **Transportation Problem** — Northwest Corner, Least Cost, Vogel Approximation, MODI optimization, cycle finding
+- **Simplex Method** — Tabular tableau iterations, pivot selection, unbounded/alternate solution detection
+- **Graphical LP** — Two-variable LP with interactive constraint plot, vertex analysis, and feasibility checking
+
+All execution logic lives in pure TypeScript functions in `src/lib/` that produce structured typed data and ordered step traces. Components consume that data and produce Spanish explanations.
+
+## Project Structure
+
+```
+src/
+├── lib/               # Algorithm source of truth (TypeScript)
+│   ├── transportation.ts
+│   ├── simplex.ts
+│   ├── graphical-lp.ts
+│   └── graphical-lp-plot.ts
+├── components/        # SolidJS UI components
+│   ├── transportation/
+│   ├── simplex/
+│   ├── GraphicalLpExplorer.tsx
+│   └── SimplexExplorer.tsx
+├── pages/             # Astro routes
+│   ├── index.astro           # /
+│   ├── transporte.astro      # /transporte
+│   ├── simplex.astro         # /simplex
+│   └── grafico.astro         # /grafico
+├── layouts/
+│   └── BaseLayout.astro
+└── styles/
+    └── global.css
+scripts/               # Python reference implementations
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Commands
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Command | Action |
+|---|---|
+| `bun install` | Install dependencies |
+| `bun dev` | Start dev server at `localhost:4321` |
+| `bun build` | Build production site to `./dist/` |
+| `bun preview` | Preview production build locally |
+| `bun test` | Run test suite (Bun) |
+| `bun check` | Biome check |
+| `bun autofix` | Biome check --fix |
+| `bun format` | Biome format --write |
