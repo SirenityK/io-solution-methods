@@ -2,17 +2,21 @@
 import "../styles/global.css";
 
 type Props = {
-  title: string;
-  description?: string;
+	title: string;
+	description?: string;
 };
 
 const {
-  title: _title,
-  description:
-    _description = "Métodos de solución de investigación de operaciones con procedimientos detallados paso a paso.",
+	title: _title,
+	description:
+		_description = "Métodos de solución de investigación de operaciones con procedimientos detallados paso a paso.",
 } = Astro.props;
 
 const _pageTitle = `${_title} | Métodos de solución IO`;
+
+
+const _lightTheme = "light";
+const _darkTheme = "dark";
 ---
 
 <!doctype html>
@@ -26,38 +30,44 @@ const _pageTitle = `${_title} | Métodos de solución IO`;
     <meta name="generator" content={Astro.generator} />
     <title>{_pageTitle}</title>
     <script is:inline>
-      let theme = "light";
+      const _lightTheme = "light";
+      const _darkTheme = "dark";
+      
+      let theme = _lightTheme;
       try {
         const storedTheme = localStorage.getItem("theme");
 
-        if (storedTheme === "dark" || storedTheme === "light") {
+        if (storedTheme === _darkTheme || storedTheme === _lightTheme) {
           theme = storedTheme;
         } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          theme = "dark";
+          theme = _darkTheme;
         }
       } catch {
         if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-          theme = "dark";
+          theme = _darkTheme;
         }
       }
       document.documentElement.setAttribute("data-theme", theme);
     </script>
     <script>
+      const _lightTheme = "light";
+      const _darkTheme = "dark";
+
       document.addEventListener("DOMContentLoaded", () => {
         const currentTheme =
-          document.documentElement.getAttribute("data-theme") === "dark"
-            ? "dark"
-            : "light";
+          document.documentElement.getAttribute("data-theme") === _darkTheme
+            ? _darkTheme
+            : _lightTheme;
         const themeController = document.querySelector(".theme-controller");
 
         if (!(themeController instanceof HTMLInputElement)) {
           return;
         }
 
-        themeController.checked = currentTheme === "light";
+        themeController.checked = currentTheme === _lightTheme;
 
         themeController.addEventListener("change", () => {
-          const selectedTheme = themeController.checked ? "light" : "dark";
+          const selectedTheme = themeController.checked ? _lightTheme : _darkTheme;
 
           document.documentElement.setAttribute("data-theme", selectedTheme);
           localStorage.setItem("theme", selectedTheme);
@@ -82,7 +92,7 @@ const _pageTitle = `${_title} | Métodos de solución IO`;
               <li><a href="/grafico">Gráfico</a></li>
             </ul>
             <label class="swap swap-rotate">
-              <input type="checkbox" class="theme-controller" value="light" />
+              <input type="checkbox" class="theme-controller" value={_lightTheme} />
               <!-- sun icon -->
               <svg
                 class="swap-on"
