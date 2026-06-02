@@ -1,6 +1,6 @@
 # "Investigacion de operaciones" solution methods
 
-This webpage contents shall be made in Spanish (MX)
+This webpage contents shall be made in Spanish (MX). But you can think, talk and write your code and comments in English, as long as the user-facing explanations are in Spanish (MX).
 
 This website is a static site that offers very verbose step-by-step solutions of multiple algorithms, adapted to a special class in TecNM. The webpage contents shall be made in Spanish (MX).
 

@@ -1,0 +1,13 @@
+---
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import { GraphicalLpExplorer } from "../components/GraphicalLpExplorer";
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="Método gráfico"
+	description="Solución dinámica paso a paso del método gráfico para programación lineal de dos variables."
+>
+	<GraphicalLpExplorer client:load />
+</BaseLayout>
