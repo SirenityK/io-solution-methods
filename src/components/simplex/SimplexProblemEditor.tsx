@@ -124,7 +124,7 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 										)}
 									</Index>
 									<td class="text-center font-semibold">
-										<Katex math="\le"/>
+										<Katex math="\le" />
 									</td>
 									<td>
 										<input

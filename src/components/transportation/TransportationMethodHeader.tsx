@@ -19,7 +19,7 @@ const methodOptions: readonly Readonly<{
 export const TransportationMethodHeader = (
 	props: TransportationMethodHeaderProps,
 ) => (
-	<div class="flex flex-wrap items-end justify-between gap-4">
+	<div class="flex flex-wrap items-end justify-between gap-4 bg-linear-to-r from-primary/10 via-base-200 to-secondary/10 p-6 rounded-box">
 		<div>
 			<div class="badge badge-primary badge-outline">Método de transporte</div>
 			<h1 class="mt-3 text-4xl font-bold">{props.title}</h1>

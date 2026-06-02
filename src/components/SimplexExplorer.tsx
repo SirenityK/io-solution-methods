@@ -192,7 +192,7 @@ export const SimplexExplorer = () => {
 		<div class="mx-auto max-w-7xl px-4 pt-8 pb-28 lg:pb-8">
 			<section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
 				<div class="space-y-4">
-					<div class="rounded-box bg-base-200 p-6">
+					<div class="rounded-box bg-linear-to-r from-info/10 to-primary/10 via-base-200 p-6">
 						<div class="badge badge-primary badge-outline">Simplex tabular</div>
 						<h1 class="mt-3 text-3xl font-bold md:text-4xl">
 							Método simplex con tableau completo
