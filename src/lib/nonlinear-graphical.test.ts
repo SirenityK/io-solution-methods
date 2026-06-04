@@ -175,6 +175,73 @@ describe("solveNonlinearGraphicalProgram", () => {
     expect(result.optimum).toBeUndefined();
   });
 
+  test("reports unbounded when the feasible region can improve forever", () => {
+    const result = solveNonlinearGraphicalProgram({
+      sense: "max",
+      objective: [1, 1],
+      constraints: [
+        { q1: 0, q2: 0, a: 1, b: 0, operator: ">=", c: 0 },
+        { q1: 0, q2: 0, a: 0, b: 1, operator: ">=", c: 0 },
+      ],
+    });
+
+    expect(result.status).toBe("unbounded");
+    expect(result.optimum).toBeUndefined();
+  });
+
+  test("reports unbounded along an equality line when objective improves", () => {
+    const result = solveNonlinearGraphicalProgram({
+      sense: "max",
+      objective: [1, 0],
+      constraints: [
+        { q1: 0, q2: 0, a: 0, b: 1, operator: "=", c: 0 },
+        { q1: 0, q2: 0, a: 1, b: 0, operator: ">=", c: 0 },
+      ],
+    });
+
+    expect(result.status).toBe("unbounded");
+  });
+
+  test("keeps impossible zero-coefficient restrictions infeasible", () => {
+    const result = solveNonlinearGraphicalProgram({
+      sense: "max",
+      objective: [1, 1],
+      constraints: [{ q1: 0, q2: 0, a: 0, b: 0, operator: "<=", c: -1 }],
+    });
+
+    expect(result.status).toBe("infeasible");
+  });
+
+  test("solves a very small bounded circle without rounding it away", () => {
+    const result = solveNonlinearGraphicalProgram({
+      sense: "max",
+      objective: [1, 0],
+      constraints: [
+        { q1: 1, q2: 1, a: 0, b: 0, operator: "<=", c: 1e-12 },
+        { q1: 0, q2: 0, a: 1, b: 0, operator: ">=", c: 0 },
+        { q1: 0, q2: 0, a: 0, b: 1, operator: ">=", c: 0 },
+      ],
+    });
+
+    expect(result.status).toBe("optimal");
+    expectClose(result.optimum?.value ?? Number.NaN, 1e-6);
+  });
+
+  test("solves a large bounded circle without classifying it as unbounded", () => {
+    const result = solveNonlinearGraphicalProgram({
+      sense: "max",
+      objective: [1, 0],
+      constraints: [
+        { q1: 1, q2: 1, a: 0, b: 0, operator: "<=", c: 1e12 },
+        { q1: 0, q2: 0, a: 1, b: 0, operator: ">=", c: 0 },
+        { q1: 0, q2: 0, a: 0, b: 1, operator: ">=", c: 0 },
+      ],
+    });
+
+    expect(result.status).toBe("optimal");
+    expectClose(result.optimum?.value ?? Number.NaN, 1e6);
+  });
+
   test("rejects invalid inputs before solving", () => {
     expect(() =>
       solveNonlinearGraphicalProgram({

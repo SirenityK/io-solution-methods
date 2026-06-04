@@ -15,6 +15,7 @@ export type NonlinearSolutionStatus =
   | "optimal"
   | "multiple-optimal"
   | "unattained"
+  | "unbounded"
   | "infeasible"
   | "no-attained-candidate";
 
@@ -1227,6 +1228,131 @@ const buildConstraintAnalyses = (
     description: constraintDescription(constraint),
   }));
 
+const objectiveImprovement = (
+  objective: readonly [number, number],
+  sense: NonlinearObjectiveSense,
+  direction: NonlinearPoint,
+): number => {
+  const value = objective[0] * direction.x1 + objective[1] * direction.x2;
+  return sense === "max" ? value : -value;
+};
+
+const normalizeDirection = (
+  direction: NonlinearPoint,
+): NonlinearPoint | undefined => {
+  const length = Math.hypot(direction.x1, direction.x2);
+  if (length <= EPSILON) {
+    return undefined;
+  }
+  return { x1: direction.x1 / length, x2: direction.x2 / length };
+};
+
+const asymptoticallySatisfiesConstraint = (
+  constraint: NonlinearConstraintInput,
+  base: NonlinearPoint,
+  direction: NonlinearPoint,
+): boolean => {
+  const quadraticCoefficient =
+    constraint.q1 * direction.x1 ** 2 + constraint.q2 * direction.x2 ** 2;
+  const linearCoefficient =
+    2 * constraint.q1 * base.x1 * direction.x1 +
+    2 * constraint.q2 * base.x2 * direction.x2 +
+    constraint.a * direction.x1 +
+    constraint.b * direction.x2;
+  const constant = evaluateNonlinearConstraint(constraint, base) - constraint.c;
+  if (constraint.operator === "<=" || constraint.operator === "<") {
+    if (quadraticCoefficient < -EPSILON) {
+      return true;
+    }
+    if (quadraticCoefficient > EPSILON) {
+      return false;
+    }
+    if (linearCoefficient < -EPSILON) {
+      return true;
+    }
+    if (linearCoefficient > EPSILON) {
+      return false;
+    }
+    return constraint.operator === "<"
+      ? constant < -FEASIBILITY_EPSILON
+      : constant <= FEASIBILITY_EPSILON;
+  }
+  if (constraint.operator === ">=" || constraint.operator === ">") {
+    if (quadraticCoefficient > EPSILON) {
+      return true;
+    }
+    if (quadraticCoefficient < -EPSILON) {
+      return false;
+    }
+    if (linearCoefficient > EPSILON) {
+      return true;
+    }
+    if (linearCoefficient < -EPSILON) {
+      return false;
+    }
+    return constraint.operator === ">"
+      ? constant > FEASIBILITY_EPSILON
+      : constant >= -FEASIBILITY_EPSILON;
+  }
+  return (
+    Math.abs(quadraticCoefficient) <= EPSILON &&
+    Math.abs(linearCoefficient) <= EPSILON &&
+    Math.abs(constant) <= FEASIBILITY_EPSILON
+  );
+};
+
+const candidateUnboundedDirections = (
+  objective: readonly [number, number],
+  constraints: readonly NonlinearConstraintInput[],
+): NonlinearPoint[] => {
+  const directions: NonlinearPoint[] = [];
+  const objectiveDirection = normalizeDirection({
+    x1: objective[0],
+    x2: objective[1],
+  });
+  if (objectiveDirection) {
+    directions.push(objectiveDirection, {
+      x1: -objectiveDirection.x1,
+      x2: -objectiveDirection.x2,
+    });
+  }
+  for (const constraint of constraints) {
+    if (isLinear(constraint)) {
+      const perpendicular = normalizeDirection({
+        x1: constraint.b,
+        x2: -constraint.a,
+      });
+      if (perpendicular) {
+        directions.push(perpendicular, {
+          x1: -perpendicular.x1,
+          x2: -perpendicular.x2,
+        });
+      }
+    }
+  }
+  for (let degrees = 0; degrees < 360; degrees += 5) {
+    const radians = (degrees * Math.PI) / 180;
+    directions.push({ x1: Math.cos(radians), x2: Math.sin(radians) });
+  }
+  return directions;
+};
+
+const isUnbounded = (
+  input: NonlinearProgramInput,
+  feasibleSample: NonlinearPoint,
+): boolean =>
+  candidateUnboundedDirections(input.objective, input.constraints).some(
+    (direction) =>
+      objectiveImprovement(input.objective, input.sense, direction) > EPSILON &&
+      input.constraints.every((constraint) =>
+        asymptoticallySatisfiesConstraint(
+          constraint,
+          feasibleSample,
+          direction,
+        ),
+      ),
+  );
+
 const optimumFromCandidates = (
   objective: readonly [number, number],
   sense: NonlinearObjectiveSense,
@@ -1340,11 +1466,17 @@ const createPlotStates = (
   }
   states.push({
     title:
-      status === "infeasible" ? "Sin región factible" : "Puntos candidatos",
+      status === "infeasible"
+        ? "Sin región factible"
+        : status === "unbounded"
+          ? "Región no acotada"
+          : "Puntos candidatos",
     description:
       status === "infeasible"
         ? "No se encontró un punto que cumpla todas las restricciones originales."
-        : "Se marcan ejes, intersecciones y tangencias que deben evaluarse en Z.",
+        : status === "unbounded"
+          ? "Existe una dirección factible donde Z mejora sin límite, por eso no hay óptimo finito."
+          : "Se marcan ejes, intersecciones y tangencias que deben evaluarse en Z.",
     visibleConstraintIndexes: Array.from(
       { length: constraintCount },
       (_, item) => item,
@@ -1384,6 +1516,11 @@ const buildSteps = (
   if (status === "unattained" && optimum) {
     steps.push(
       `El mejor valor es ${optimum.boundName}; se aproxima, pero no se alcanza.`,
+    );
+  }
+  if (status === "unbounded") {
+    steps.push(
+      "La región factible permite avanzar indefinidamente en una dirección que mejora Z; no existe óptimo finito.",
     );
   }
   return steps;
@@ -1428,6 +1565,8 @@ export const solveNonlinearGraphicalProgram = (
   let optimum: NonlinearOptimum | undefined;
   if (!feasibleSample) {
     status = "infeasible";
+  } else if (isUnbounded(input, feasibleSample)) {
+    status = "unbounded";
   } else {
     const optimalResult = optimumFromCandidates(
       input.objective,

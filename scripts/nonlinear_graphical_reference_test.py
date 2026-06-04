@@ -135,6 +135,51 @@ class NonlinearGraphicalReferenceTest(unittest.TestCase):
 
         self.assertEqual(result["status"], "infeasible")
 
+    def test_reports_unbounded_quadrant(self) -> None:
+        result = solve(
+            {
+                "sense": "max",
+                "objective": [1, 1],
+                "constraints": [
+                    {"q1": 0, "q2": 0, "a": 1, "b": 0, "operator": ">=", "c": 0},
+                    {"q1": 0, "q2": 0, "a": 0, "b": 1, "operator": ">=", "c": 0},
+                ],
+            }
+        )
+
+        self.assertEqual(result["status"], "unbounded")
+
+    def test_impossible_zero_coefficient_restriction_is_infeasible(self) -> None:
+        result = solve(
+            {
+                "sense": "max",
+                "objective": [1, 1],
+                "constraints": [
+                    {"q1": 0, "q2": 0, "a": 0, "b": 0, "operator": "<=", "c": -1},
+                ],
+            }
+        )
+
+        self.assertEqual(result["status"], "infeasible")
+
+    def test_handles_small_and_large_bounded_circles(self) -> None:
+        for radius_squared, expected in ((1e-12, 1e-6), (1e12, 1e6)):
+            with self.subTest(radius_squared=radius_squared):
+                result = solve(
+                    {
+                        "sense": "max",
+                        "objective": [1, 0],
+                        "constraints": [
+                            {"q1": 1, "q2": 1, "a": 0, "b": 0, "operator": "<=", "c": radius_squared},
+                            {"q1": 0, "q2": 0, "a": 1, "b": 0, "operator": ">=", "c": 0},
+                            {"q1": 0, "q2": 0, "a": 0, "b": 1, "operator": ">=", "c": 0},
+                        ],
+                    }
+                )
+
+                self.assertEqual(result["status"], "optimal")
+                self.assertTrue(math.isclose(optimum_value(result), expected, abs_tol=max(1e-7, expected * 1e-9)))
+
 
 if __name__ == "__main__":
     unittest.main()

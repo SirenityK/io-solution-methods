@@ -224,6 +224,76 @@ def feasible_sample(constraints: list[Constraint], candidates: list[Point]) -> P
     return None
 
 
+def objective_improvement(objective: tuple[float, float], sense: Sense, direction: Point) -> float:
+    value = objective[0] * direction[0] + objective[1] * direction[1]
+    return value if sense == "max" else -value
+
+
+def normalize(direction: Point) -> Point | None:
+    length = math.hypot(direction[0], direction[1])
+    if length <= EPS:
+        return None
+    return (direction[0] / length, direction[1] / length)
+
+
+def asymptotically_satisfies(constraint: Constraint, base: Point, direction: Point) -> bool:
+    quadratic = constraint.q1 * direction[0] ** 2 + constraint.q2 * direction[1] ** 2
+    linear = (
+        2 * constraint.q1 * base[0] * direction[0]
+        + 2 * constraint.q2 * base[1] * direction[1]
+        + constraint.a * direction[0]
+        + constraint.b * direction[1]
+    )
+    constant = constraint.residual_at(base)
+    if constraint.operator in ("<=", "<"):
+        if quadratic < -EPS:
+            return True
+        if quadratic > EPS:
+            return False
+        if linear < -EPS:
+            return True
+        if linear > EPS:
+            return False
+        return constant < -FEAS_EPS if constraint.operator == "<" else constant <= FEAS_EPS
+    if constraint.operator in (">=", ">"):
+        if quadratic > EPS:
+            return True
+        if quadratic < -EPS:
+            return False
+        if linear > EPS:
+            return True
+        if linear < -EPS:
+            return False
+        return constant > FEAS_EPS if constraint.operator == ">" else constant >= -FEAS_EPS
+    return abs(quadratic) <= EPS and abs(linear) <= EPS and abs(constant) <= FEAS_EPS
+
+
+def unbounded_directions(objective: tuple[float, float], constraints: list[Constraint]) -> list[Point]:
+    directions: list[Point] = []
+    objective_direction = normalize(objective)
+    if objective_direction is not None:
+        directions.extend([objective_direction, (-objective_direction[0], -objective_direction[1])])
+    for constraint in constraints:
+        if constraint.is_linear():
+            perpendicular = normalize((constraint.b, -constraint.a))
+            if perpendicular is not None:
+                directions.extend([perpendicular, (-perpendicular[0], -perpendicular[1])])
+    for degrees in range(0, 360, 5):
+        radians = math.radians(degrees)
+        directions.append((math.cos(radians), math.sin(radians)))
+    return directions
+
+
+def is_unbounded(problem: dict, constraints: list[Constraint], sample: Point) -> bool:
+    sense: Sense = problem["sense"]
+    objective = tuple(problem["objective"])
+    return any(
+        objective_improvement(objective, sense, direction) > EPS
+        and all(asymptotically_satisfies(constraint, sample, direction) for constraint in constraints)
+        for direction in unbounded_directions(objective, constraints)
+    )
+
+
 def solve(problem: dict) -> dict:
     sense: Sense = problem["sense"]
     objective = tuple(problem["objective"])
@@ -246,6 +316,9 @@ def solve(problem: dict) -> dict:
 
     if sample is None:
         status = "infeasible"
+        optimum = None
+    elif is_unbounded(problem, constraints, sample):
+        status = "unbounded"
         optimum = None
     elif not candidates:
         status = "no-attained-candidate"

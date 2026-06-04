@@ -117,6 +117,8 @@ const statusLabel = (status: NonlinearProgramSolution["status"]): string => {
       return "óptimos múltiples";
     case "unattained":
       return "valor límite";
+    case "unbounded":
+      return "no acotado";
     case "infeasible":
       return "infactible";
     case "no-attained-candidate":
