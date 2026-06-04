@@ -3,54 +3,54 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const _algorithms = [
-	{
-		number: "01",
-		name: "Transporte",
-		href: "/transporte",
-		summary:
-			"Modela oferta y demanda con asignaciones iniciales, costos visibles y optimización para cerrar el menor costo total.",
-		details: ["Asignaciones iniciales", "Ciclos y degeneración", "Costo total"],
-		status: "Oferta y demanda",
-		badgeClass: "badge-primary",
-		buttonClass: "btn-primary",
-		figureClass: "text-primary",
-	},
-	{
-		number: "02",
-		name: "Simplex tabular",
-		href: "/simplex",
-		summary:
-			"Sigue cada tableau con base, columna pivote, razón mínima y valor objetivo hasta llegar al criterio de optimalidad.",
-		details: ["Base inicial", "Tablas por iteración", "Valor objetivo"],
-		status: "Tableau completo",
-		badgeClass: "badge-secondary",
-		buttonClass: "btn-secondary",
-		figureClass: "text-secondary",
-	},
-	{
-		number: "03",
-		name: "Método gráfico",
-		href: "/grafico",
-		summary:
-			"Construye el plano factible para dos variables, muestra restricciones, vértices candidatos y lectura geométrica de Z.",
-		details: ["Región factible", "Vértices", "Óptimo geométrico"],
-		status: "Plano factible",
-		badgeClass: "badge-accent",
-		buttonClass: "btn-accent",
-		figureClass: "text-accent",
-	},
-	{
-		number: "04",
-		name: "No lineal gráfico",
-		href: "/no-lineal",
-		summary:
-			"Extiende la lectura gráfica a restricciones con cuadrados, curvas, tangencias y fronteras estrictas.",
-		details: ["Curvas cuadráticas", "Tangencias", "Valores límite"],
-		status: "Cuadrático",
-		badgeClass: "badge-info",
-		buttonClass: "btn-info",
-		figureClass: "text-info",
-	},
+  {
+    number: "01",
+    name: "Transporte",
+    href: "/transporte",
+    summary:
+      "Modela oferta y demanda con asignaciones iniciales, costos visibles y optimización para cerrar el menor costo total.",
+    details: ["Asignaciones iniciales", "Ciclos y degeneración", "Costo total"],
+    status: "Oferta y demanda",
+    badgeClass: "badge-primary",
+    buttonClass: "btn-primary",
+    figureClass: "text-primary",
+  },
+  {
+    number: "02",
+    name: "Simplex tabular",
+    href: "/simplex",
+    summary:
+      "Sigue cada tableau con base, columna pivote, razón mínima y valor objetivo hasta llegar al criterio de optimalidad.",
+    details: ["Base inicial", "Tablas por iteración", "Valor objetivo"],
+    status: "Tableau completo",
+    badgeClass: "badge-secondary",
+    buttonClass: "btn-secondary",
+    figureClass: "text-secondary",
+  },
+  {
+    number: "03",
+    name: "Método gráfico",
+    href: "/grafico",
+    summary:
+      "Construye el plano factible para dos variables, muestra restricciones, vértices candidatos y lectura geométrica de Z.",
+    details: ["Región factible", "Vértices", "Óptimo geométrico"],
+    status: "Plano factible",
+    badgeClass: "badge-accent",
+    buttonClass: "btn-accent",
+    figureClass: "text-accent",
+  },
+  {
+    number: "04",
+    name: "No lineal gráfico",
+    href: "/no-lineal",
+    summary:
+      "Extiende la lectura gráfica a restricciones con cuadrados, curvas, tangencias y fronteras estrictas.",
+    details: ["Curvas cuadráticas", "Tangencias", "Valores límite"],
+    status: "Cuadrático",
+    badgeClass: "badge-info",
+    buttonClass: "btn-info",
+    figureClass: "text-info",
+  },
 ] as const;
 ---
 

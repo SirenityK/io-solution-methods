@@ -7,14 +7,14 @@ export type MutableMatrix = number[][];
 export type MutableBooleanMatrix = boolean[][];
 
 export type MatrixPosition = Readonly<{
-	row: number;
-	column: number;
+  row: number;
+  column: number;
 }>;
 
 export type AlgorithmStep = Readonly<{
-	title: string;
-	description: string;
-	data?: Readonly<Record<string, unknown>>;
+  title: string;
+  description: string;
+  data?: Readonly<Record<string, unknown>>;
 }>;
 
 export type OptimizationDirection = "max" | "min";
