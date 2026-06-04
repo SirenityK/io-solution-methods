@@ -39,12 +39,24 @@ const _algorithms = [
 		buttonClass: "btn-accent",
 		figureClass: "text-accent",
 	},
+	{
+		number: "04",
+		name: "No lineal gráfico",
+		href: "/no-lineal",
+		summary:
+			"Extiende la lectura gráfica a restricciones con cuadrados, curvas, tangencias y fronteras estrictas.",
+		details: ["Curvas cuadráticas", "Tangencias", "Valores límite"],
+		status: "Cuadrático",
+		badgeClass: "badge-info",
+		buttonClass: "btn-info",
+		figureClass: "text-info",
+	},
 ] as const;
 ---
 
 <BaseLayout
 	title="Inicio"
-	description="Métodos de solución de investigación de operaciones para clase TecNM, con rutas preparadas para transporte, simplex tabular y método gráfico."
+	description="Métodos de solución de investigación de operaciones para clase TecNM, con rutas preparadas para transporte, simplex tabular, método gráfico y programación no lineal."
 >
 	<section
 		class="hero min-h-[calc(100vh-4rem)] bg-base-200 bg-[linear-gradient(to_right,color-mix(in_oklch,var(--color-base-content)_13%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklch,var(--color-base-content)_13%,transparent)_1px,transparent_1px)] bg-size-[2rem_2rem]"
@@ -76,7 +88,7 @@ const _algorithms = [
 
 					<div class="stats stats-vertical bg-base-200 shadow-[6px_6px_0_0_var(--color-neutral)] md:stats-horizontal">
 						<div class="stat">
-							<div class="stat-value text-primary">03</div>
+							<div class="stat-value text-primary">04</div>
 							<div class="stat-title">métodos disponibles</div>
 						</div>
 						<div class="stat">

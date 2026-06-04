@@ -1,0 +1,13 @@
+---
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import { NonlinearGraphicalExplorer } from "../components/NonlinearGraphicalExplorer";
+// biome-ignore lint/correctness/noUnusedImports: Astro component imports are consumed by markup.
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+	title="Programación no lineal"
+	description="Solución gráfica paso a paso para programación no lineal de dos variables con restricciones cuadráticas."
+>
+	<NonlinearGraphicalExplorer client:load />
+</BaseLayout>
