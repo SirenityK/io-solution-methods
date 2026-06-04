@@ -22,7 +22,7 @@ export const TransportationProblemEditor = (
 	props: TransportationProblemEditorProps,
 ) => (
 	<div class="card bg-base-100 shadow">
-		<div class="card-body gap-4">
+		<div class="card-body gap-4 p-4 sm:p-6">
 			<div class="flex flex-wrap items-center justify-between gap-3">
 				<div>
 					<h2 class="card-title">Datos del problema</h2>
@@ -33,7 +33,7 @@ export const TransportationProblemEditor = (
 				</div>
 				<button
 					type="button"
-					class="btn btn-outline btn-sm"
+					class="btn btn-outline sm:btn-sm"
 					onClick={props.onReset}
 				>
 					Restaurar ejemplo
@@ -82,8 +82,8 @@ export const TransportationProblemEditor = (
 				</label>
 			</div>
 
-			<div class="overflow-x-auto">
-				<table class="table table-sm">
+			<div class="overflow-x-auto overscroll-x-contain rounded-box border border-base-300">
+				<table class="table table-xs min-w-max sm:table-sm">
 					<thead>
 						<tr>
 							<th>Origen</th>
@@ -105,7 +105,7 @@ export const TransportationProblemEditor = (
 													type="number"
 													min="0"
 													inputmode="numeric"
-													class="input input-bordered input-sm w-20 text-center font-mono sm:text-right"
+													class="input input-bordered h-11 w-20 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 													value={cost()}
 													aria-label={`Costo O${row + 1}-D${column + 1}`}
 													onFocus={(event) =>
@@ -129,7 +129,7 @@ export const TransportationProblemEditor = (
 											type="number"
 											min="0"
 											inputmode="numeric"
-											class="input input-bordered input-sm w-24 text-center font-mono sm:text-right"
+											class="input input-bordered h-11 w-24 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 											value={props.problem.supply[row] ?? 0}
 											aria-label={`Oferta O${row + 1}`}
 											onFocus={(event) => selectInputValue(event.currentTarget)}
@@ -155,7 +155,7 @@ export const TransportationProblemEditor = (
 											type="number"
 											min="0"
 											inputmode="numeric"
-											class="input input-bordered input-sm w-20 text-center font-mono sm:text-right"
+											class="input input-bordered h-11 w-20 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 											value={demand()}
 											aria-label={`Demanda D${column + 1}`}
 											onFocus={(event) => selectInputValue(event.currentTarget)}

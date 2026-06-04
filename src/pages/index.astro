@@ -47,21 +47,18 @@ const _algorithms = [
 	description="Métodos de solución de investigación de operaciones para clase TecNM, con rutas preparadas para transporte, simplex tabular y método gráfico."
 >
 	<section
-		class="hero min-h-[calc(100vh-4rem)] border-b-2 border-neutral bg-base-200 bg-[linear-gradient(to_right,color-mix(in_oklch,var(--color-base-content)_13%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklch,var(--color-base-content)_13%,transparent)_1px,transparent_1px)] bg-size-[2rem_2rem]"
+		class="hero min-h-[calc(100vh-4rem)] bg-base-200 bg-[linear-gradient(to_right,color-mix(in_oklch,var(--color-base-content)_13%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklch,var(--color-base-content)_13%,transparent)_1px,transparent_1px)] bg-size-[2rem_2rem]"
 	>
 		<div class="hero-content w-full max-w-7xl flex-col gap-8 px-4 py-10 lg:flex-row lg:items-stretch lg:py-14">
-			<div class="card card-border w-full border-2 border-neutral bg-base-100 shadow-[10px_10px_0_0_var(--color-neutral)] lg:min-h-[34rem] lg:flex-1">
+			<div class="card card-border w-full bg-base-100 shadow-[10px_10px_0_0_var(--color-neutral)] lg:min-h-136 lg:flex-1">
 				<div class="card-body justify-between gap-8 p-6 md:p-8">
 					<div class="space-y-6">
 						<div class="flex flex-wrap items-center gap-3">
 							<span class="badge badge-primary badge-lg badge-outline">TecNM</span>
-							<span class="badge badge-neutral badge-lg">Investigación de operaciones</span>
+							<span class="badge badge-primary badge-lg">Investigación de operaciones</span>
 						</div>
 
 						<div class="space-y-5">
-							<p class="font-mono text-sm font-bold uppercase text-primary">
-								Unidad de métodos de solución
-							</p>
 							<h1 class="max-w-4xl text-4xl font-black leading-tight md:text-6xl lg:text-7xl">
 								Investigación de operaciones, sin saltarse pasos.
 							</h1>
@@ -71,13 +68,13 @@ const _algorithms = [
 							</p>
 						</div>
 
-						<div class="join join-vertical w-full sm:join-horizontal sm:w-auto">
-							<a class="btn btn-primary join-item" href="#algoritmos">Ver métodos</a>
-							<a class="btn btn-outline join-item" href="/grafico">Abrir método gráfico</a>
+						<div class="w-full m:w-auto">
+							<a class="btn btn-primary" href="#algoritmos">Ver métodos</a>
+							<a class="btn btn-outline" href="/grafico">Abrir método gráfico</a>
 						</div>
 					</div>
 
-					<div class="stats stats-vertical border-2 border-neutral bg-base-200 shadow-[6px_6px_0_0_var(--color-neutral)] md:stats-horizontal">
+					<div class="stats stats-vertical bg-base-200 shadow-[6px_6px_0_0_var(--color-neutral)] md:stats-horizontal">
 						<div class="stat">
 							<div class="stat-value text-primary">03</div>
 							<div class="stat-title">métodos disponibles</div>
@@ -94,16 +91,16 @@ const _algorithms = [
 				</div>
 			</div>
 
-			<div class="grid w-full gap-4 lg:w-[28rem]">
-				<div class="mockup-window border-2 border-neutral bg-base-300 shadow-[8px_8px_0_0_var(--color-neutral)]">
+			<div class="grid w-full gap-4 lg:w-md">
+				<div class="mockup-window bg-base-300 shadow-[8px_8px_0_0_var(--color-neutral)]">
 					<div class="grid gap-4 bg-base-100 p-4">
-						<div class="card card-border border-neutral bg-warning/20">
+						<div class="card bg-warning/20">
 							<div class="card-body gap-3 p-4">
 								<div class="flex items-center justify-between gap-3">
 									<span class="badge badge-warning badge-outline">Transporte</span>
 									<span class="font-mono text-xs font-bold">min Z</span>
 								</div>
-								<div class="overflow-x-auto rounded-box border border-neutral bg-base-100">
+								<div class="overflow-x-auto rounded-box shadow-md bg-base-100">
 									<table class="table table-xs">
 										<tbody class="font-mono">
 											<tr>
@@ -133,13 +130,13 @@ const _algorithms = [
 							</div>
 						</div>
 
-						<div class="card card-border border-neutral bg-info/15">
+						<div class="card bg-info/15">
 							<div class="card-body gap-3 p-4">
 								<div class="flex items-center justify-between gap-3">
 									<span class="badge badge-info badge-outline">Simplex</span>
 									<span class="font-mono text-xs font-bold">pivote</span>
 								</div>
-								<div class="overflow-x-auto rounded-box border border-neutral bg-base-100">
+								<div class="overflow-x-auto rounded-box bg-base-100">
 									<table class="table table-xs">
 										<tbody class="font-mono">
 											<tr>
@@ -166,13 +163,13 @@ const _algorithms = [
 							</div>
 						</div>
 
-						<div class="card card-border border-neutral bg-accent/15">
+						<div class="card bg-accent/15">
 							<div class="card-body gap-3 p-4">
 								<div class="flex items-center justify-between gap-3">
 									<span class="badge badge-accent badge-outline">Gráfico</span>
 									<span class="font-mono text-xs font-bold">x1, x2</span>
 								</div>
-								<div class="h-36 overflow-hidden rounded-box border border-neutral bg-base-100 p-3">
+								<div class="h-36 overflow-hidden rounded-box bg-base-100 p-3">
 									<svg
 										viewBox="0 0 280 136"
 										role="img"
@@ -209,7 +206,7 @@ const _algorithms = [
 					</div>
 				</div>
 
-				<div class="alert alert-info alert-outline border-2 border-neutral bg-base-100 shadow-[6px_6px_0_0_var(--color-neutral)]">
+				<div class="alert alert-info alert-outline bg-base-100">
 					<span class="font-semibold">
 						Avanza, compara y revisa por qué se eligió cada celda, pivote o
 						vértice.
@@ -222,7 +219,7 @@ const _algorithms = [
 	<section class="border-b-2 border-neutral bg-base-200">
 		<div class="mx-auto max-w-7xl px-4 py-10 md:py-12">
 			<div class="grid gap-5 lg:grid-cols-3">
-				<article class="card card-border border-2 border-neutral bg-base-100 shadow-[6px_6px_0_0_var(--color-neutral)]">
+				<article class="card bg-base-100 shadow-[6px_6px_0_0_var(--color-neutral)]">
 					<div class="card-body">
 						<span class="badge badge-primary badge-outline">1</span>
 						<h2 class="card-title">Decisión actual</h2>
@@ -233,7 +230,7 @@ const _algorithms = [
 					</div>
 				</article>
 
-				<article class="card card-border border-2 border-neutral bg-base-100 shadow-[6px_6px_0_0_var(--color-neutral)]">
+				<article class="card bg-base-100 shadow-[6px_6px_0_0_var(--color-neutral)]">
 					<div class="card-body">
 						<span class="badge badge-secondary badge-outline">2</span>
 						<h2 class="card-title">Tabla en movimiento</h2>
@@ -244,7 +241,7 @@ const _algorithms = [
 					</div>
 				</article>
 
-				<article class="card card-border border-2 border-neutral bg-base-100 shadow-[6px_6px_0_0_var(--color-neutral)]">
+				<article class="card bg-base-100 shadow-[6px_6px_0_0_var(--color-neutral)]">
 					<div class="card-body">
 						<span class="badge badge-accent badge-outline">3</span>
 						<h2 class="card-title">Cierre verificable</h2>
@@ -262,7 +259,7 @@ const _algorithms = [
 		<div class="mx-auto max-w-7xl px-4 py-12 md:py-16">
 			<div class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
 				<div>
-					<span class="badge badge-neutral badge-lg">Fichas de método</span>
+					<span class="badge badge-primary badge-lg">Fichas de método</span>
 					<h2 class="mt-4 text-3xl font-black md:text-5xl">Algoritmos implementados</h2>
 				</div>
 				<p class="max-w-2xl text-base-content/70">
@@ -275,7 +272,7 @@ const _algorithms = [
 			<div class="grid gap-5 lg:grid-cols-3">
 				{
 					_algorithms.map((algorithm) => (
-						<article class="card card-border border-2 border-neutral bg-base-100 shadow-[7px_7px_0_0_var(--color-neutral)]">
+						<article class="card card-border border border-neutral bg-base-100 shadow-[7px_7px_0_0_var(--color-neutral)]">
 							<div class="card-body gap-5">
 								<div class="flex items-start justify-between gap-4">
 									<div>

@@ -14,7 +14,6 @@ const {
 
 const _pageTitle = `${_title} | Métodos de solución IO`;
 
-
 const _lightTheme = "light";
 const _darkTheme = "dark";
 ---
@@ -78,19 +77,24 @@ const _darkTheme = "dark";
   <body>
     <div class="min-h-screen bg-base-100">
       <header class="bg-base-100 shadow-sm">
-        <nav class="navbar mx-auto max-w-6xl" aria-label="Navegación principal">
+        <nav
+          class="navbar mx-auto max-w-6xl px-2 sm:px-4"
+          aria-label="Navegación principal"
+        >
           <div class="navbar-start">
             <a class="btn btn-ghost text-lg" href="/">
               <span class="badge badge-primary badge-lg">IO</span>
               <span>Métodos IO</span>
             </a>
           </div>
-          <div class="navbar-end">
+          <div class="navbar-center hidden md:flex">
             <ul class="menu menu-horizontal">
               <li><a href="/transporte">Transporte</a></li>
               <li><a href="/simplex">Simplex</a></li>
               <li><a href="/grafico">Gráfico</a></li>
             </ul>
+          </div>
+          <div class="navbar-end gap-1">
             <label class="swap swap-rotate">
               <input type="checkbox" class="theme-controller" value={_lightTheme} />
               <!-- sun icon -->
@@ -131,6 +135,37 @@ const _darkTheme = "dark";
                 ></path></svg
               >
             </label>
+            <div class="dropdown dropdown-end md:hidden">
+              <button
+                type="button"
+                class="btn btn-ghost btn-square"
+                aria-label="Abrir navegación"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-menu"
+                >
+                  <path d="M4 12h16"></path>
+                  <path d="M4 18h16"></path>
+                  <path d="M4 6h16"></path>
+                </svg>
+              </button>
+              <ul
+                class="menu dropdown-content menu-sm z-10 mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
+              >
+                <li><a href="/transporte">Transporte</a></li>
+                <li><a href="/simplex">Simplex</a></li>
+                <li><a href="/grafico">Gráfico</a></li>
+              </ul>
+            </div>
           </div>
         </nav>
       </header>

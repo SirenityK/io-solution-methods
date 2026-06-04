@@ -28,14 +28,14 @@ const getCellState = (
 });
 
 export const TransportationTable = (props: TransportationTableProps) => (
-	<div class="overflow-x-auto rounded-box border border-base-300 bg-base-100">
-		<table class="table table-zebra">
+	<div class="overflow-x-auto overscroll-x-contain rounded-box border border-base-300 bg-base-100">
+		<table class="table table-xs min-w-max table-zebra sm:table-sm lg:table-md">
 			<thead>
 				<tr>
 					<th>Origen</th>
 					<For each={props.problem.demand}>
 						{(_, column) => (
-							<th class="min-w-32 text-center">
+							<th class="min-w-28 text-center sm:min-w-32">
 								<div>D{column() + 1}</div>
 								<div class="text-xs font-normal text-secondary">
 									Penalización:{" "}
@@ -71,12 +71,12 @@ export const TransportationTable = (props: TransportationTableProps) => (
 									return (
 										<td
 											classList={{
-												"bg-primary/15": cell().isSelected,
-												"opacity-45":
-													cell().isInactiveRow || cell().isInactiveColumn,
+												"bg-primary": cell().isSelected,
+												// "opacity-45":
+												// 	cell().isInactiveRow || cell().isInactiveColumn,
 											}}
 										>
-											<div class="flex min-h-20 flex-col justify-between gap-2">
+											<div class="flex min-h-16 flex-col justify-between gap-2 sm:min-h-20">
 												<div class="text-xs uppercase text-base-content/60">
 													Costo
 												</div>

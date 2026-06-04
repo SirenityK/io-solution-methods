@@ -191,7 +191,7 @@ export const SimplexExplorer = () => {
 	return (
 		<div class="mx-auto max-w-7xl px-4 pt-8 pb-28 lg:pb-8">
 			<section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
-				<div class="space-y-4">
+				<div class="min-w-0 space-y-4">
 					<div class="rounded-box bg-linear-to-r from-info/10 to-primary/10 via-base-200 p-6">
 						<div class="badge badge-primary badge-outline">Simplex tabular</div>
 						<h1 class="mt-3 text-3xl font-bold md:text-4xl">
@@ -240,12 +240,14 @@ export const SimplexExplorer = () => {
 					</Show>
 				</div>
 
-				<aside class="space-y-4 lg:sticky lg:top-4 lg:self-start">
-					<StepControls
-						currentStep={selectedStep()}
-						maxStep={maxStep()}
-						onStepChange={goToStep}
-					/>
+				<aside class="min-w-0 space-y-4 lg:sticky lg:top-4 lg:self-start">
+					<div class="hidden lg:block">
+						<StepControls
+							currentStep={selectedStep()}
+							maxStep={maxStep()}
+							onStepChange={goToStep}
+						/>
+					</div>
 					<Show when={solutionState().solution}>
 						{(solution) => (
 							<>

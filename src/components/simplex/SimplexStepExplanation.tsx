@@ -33,7 +33,7 @@ const getOperationReason = (
 
 export const SimplexStepExplanation = (props: SimplexStepExplanationProps) => (
 	<div class="card bg-base-200">
-		<div class="card-body gap-4">
+		<div class="card-body gap-4 p-4 sm:p-6">
 			<div>
 				<div class="badge badge-primary badge-outline">
 					{props.currentStep === 0

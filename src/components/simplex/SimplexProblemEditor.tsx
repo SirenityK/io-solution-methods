@@ -25,7 +25,7 @@ const selectInputValue = (input: HTMLInputElement): void => {
 
 export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 	<div class="card bg-base-100 shadow">
-		<div class="card-body gap-4">
+		<div class="card-body gap-4 p-4 sm:p-6">
 			<div class="flex flex-wrap items-center justify-between gap-3">
 				<div>
 					<h2 class="card-title">Problema original</h2>
@@ -36,7 +36,7 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 				</div>
 				<button
 					type="button"
-					class="btn btn-outline btn-sm"
+					class="btn btn-outline sm:btn-sm"
 					onClick={props.onReset}
 				>
 					Restaurar ejemplo
@@ -44,8 +44,8 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 			</div>
 
 			<div class="grid gap-3 sm:grid-cols-2">
-				<label class="form-control gap-1">
-					<span class="label-text">Restricciones</span>
+				<label class="form-control space-x-2">
+					<span>Restricciones</span>
 					<input
 						type="number"
 						min="1"
@@ -62,8 +62,8 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 					/>
 				</label>
 
-				<label class="form-control gap-1">
-					<span class="label-text">Variables de decisión</span>
+				<label class="form-control space-x-2">
+					<span>Variables de decisión</span>
 					<input
 						type="number"
 						min="1"
@@ -81,8 +81,8 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 				</label>
 			</div>
 
-			<div class="overflow-x-auto rounded-box border border-base-300">
-				<table class="table table-sm">
+			<div class="overflow-x-auto overscroll-x-contain rounded-box border border-base-300">
+				<table class="table table-xs min-w-max sm:table-sm">
 					<thead>
 						<tr>
 							<th>Fila</th>
@@ -104,7 +104,7 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 												<input
 													type="number"
 													inputmode="decimal"
-													class="input input-bordered input-sm w-20 text-center font-mono sm:text-right"
+													class="input input-bordered h-11 w-20 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 													value={coefficient()}
 													aria-label={`Coeficiente de ${props.problem.decisionVariableNames[column] ?? `x${column + 1}`} en restricción ${row + 1}`}
 													onFocus={(event) =>
@@ -131,7 +131,7 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 											type="number"
 											min="0"
 											inputmode="decimal"
-											class="input input-bordered input-sm w-24 text-center font-mono sm:text-right"
+											class="input input-bordered h-11 w-24 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 											value={props.problem.resources[row] ?? 0}
 											aria-label={`Recurso de restricción ${row + 1}`}
 											onFocus={(event) => selectInputValue(event.currentTarget)}
@@ -157,7 +157,7 @@ export const SimplexProblemEditor = (props: SimplexProblemEditorProps) => (
 											type="number"
 											min="0"
 											inputmode="decimal"
-											class="input input-bordered input-sm w-20 text-center font-mono sm:text-right"
+											class="input input-bordered h-11 w-20 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 											value={coefficient()}
 											aria-label={`Coeficiente objetivo de ${props.problem.decisionVariableNames[column] ?? `x${column + 1}`}`}
 											onFocus={(event) => selectInputValue(event.currentTarget)}

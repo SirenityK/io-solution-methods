@@ -237,7 +237,7 @@ const GraphicalPlot = (props: {
 
 	return (
 		<div class="card bg-base-100 shadow-xl">
-			<div class="card-body gap-4">
+			<div class="card-body gap-4 p-4 sm:p-6">
 				<div class="flex flex-wrap items-start justify-between gap-3">
 					<div>
 						<h2 class="card-title">{props.state.title}</h2>
@@ -250,12 +250,12 @@ const GraphicalPlot = (props: {
 					</div>
 				</div>
 
-				<div class="overflow-x-auto bg-info/10 dark:bg-neutral">
+				<div class="overflow-x-auto overscroll-x-contain bg-info/10 dark:bg-neutral">
 					<svg
 						viewBox={`0 0 ${plot().width} ${plot().height}`}
 						role="img"
 						aria-label="Gráfica incremental del método gráfico"
-						class="min-h-90 w-full min-w-155 bg-base-200"
+						class="min-h-80 w-full min-w-120 bg-base-200 sm:min-h-90 sm:min-w-155"
 					>
 						<defs>
 							<marker
@@ -483,7 +483,7 @@ const ProblemEditor = (props: {
 
 	return (
 		<div class="card bg-base-100 shadow">
-			<div class="card-body gap-4">
+			<div class="card-body gap-4 p-4 sm:p-6">
 				<div class="flex flex-wrap items-center justify-between gap-3">
 					<div>
 						<h2 class="card-title">Problema editable</h2>
@@ -496,7 +496,7 @@ const ProblemEditor = (props: {
 					</div>
 					<button
 						type="button"
-						class="btn btn-outline btn-sm"
+						class="btn btn-outline sm:btn-sm"
 						onClick={props.onReset}
 					>
 						Restaurar ejemplo
@@ -504,7 +504,7 @@ const ProblemEditor = (props: {
 				</div>
 
 				<div class="grid gap-3 md:grid-cols-[10rem_1fr_1fr_10rem]">
-					<label class="form-control gap-1">
+					<label class="form-control space-x-2">
 						<span class="label-text">Tipo</span>
 						<select
 							class="select select-bordered"
@@ -522,7 +522,7 @@ const ProblemEditor = (props: {
 					</label>
 					<Index each={props.problem.objective}>
 						{(coefficient, index) => (
-							<label class="form-control gap-1">
+							<label class="form-control space-x-2">
 								<span class="label-text">Coeficiente c{index + 1}</span>
 								<input
 									type="number"
@@ -545,7 +545,7 @@ const ProblemEditor = (props: {
 							</label>
 						)}
 					</Index>
-					<label class="form-control gap-1">
+					<label class="form-control space-x-2">
 						<span class="label-text">Restricciones</span>
 						<input
 							type="number"
@@ -570,8 +570,8 @@ const ProblemEditor = (props: {
 					</label>
 				</div>
 
-				<div class="overflow-x-auto rounded-box border border-base-300">
-					<table class="table table-sm">
+				<div class="overflow-x-auto overscroll-x-contain rounded-box border border-base-300">
+					<table class="table table-xs min-w-max sm:table-sm">
 						<thead>
 							<tr>
 								<th>Restricción</th>
@@ -590,7 +590,7 @@ const ProblemEditor = (props: {
 											<input
 												type="number"
 												inputmode="decimal"
-												class="input input-bordered input-sm w-24 text-center font-mono sm:text-right"
+												class="input input-bordered h-11 w-24 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 												value={constraint().a}
 												onFocus={(event) =>
 													selectInputValue(event.currentTarget)
@@ -608,7 +608,7 @@ const ProblemEditor = (props: {
 											<input
 												type="number"
 												inputmode="decimal"
-												class="input input-bordered input-sm w-24 text-center font-mono sm:text-right"
+												class="input input-bordered h-11 w-24 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 												value={constraint().b}
 												onFocus={(event) =>
 													selectInputValue(event.currentTarget)
@@ -624,7 +624,7 @@ const ProblemEditor = (props: {
 										</td>
 										<td>
 											<select
-												class="select select-bordered select-sm"
+												class="select select-bordered h-11 sm:select-sm sm:h-8"
 												value={constraint().operator}
 												onChange={(event) =>
 													changeConstraint(index, {
@@ -644,7 +644,7 @@ const ProblemEditor = (props: {
 											<input
 												type="number"
 												inputmode="decimal"
-												class="input input-bordered input-sm w-24 text-center font-mono sm:text-right"
+												class="input input-bordered h-11 w-24 text-center font-mono sm:input-sm sm:h-8 sm:text-right"
 												value={constraint().c}
 												onFocus={(event) =>
 													selectInputValue(event.currentTarget)
@@ -676,7 +676,7 @@ const ConstraintNotebook = (props: {
 	const constraint = () => props.solution.constraints[props.constraintIndex];
 	return (
 		<div class="card bg-base-100 shadow">
-			<div class="card-body gap-4">
+			<div class="card-body gap-4 p-4 sm:p-6">
 				<h2 class="card-title">Restricción {props.constraintIndex + 1}</h2>
 				<div class="prose max-w-none">
 					<p>
@@ -759,7 +759,7 @@ const VertexAndObjectiveNotebook = (props: {
 	solution: GraphicalLinearProgramSolution;
 }) => (
 	<div class="card bg-base-100 shadow">
-		<div class="card-body gap-4">
+		<div class="card-body gap-4 p-4 sm:p-6">
 			<h2 class="card-title">Puntos esquina y función objetivo</h2>
 			<Show
 				when={props.solution.status !== "infeasible"}
@@ -822,8 +822,8 @@ const VertexAndObjectiveNotebook = (props: {
 				<Show when={props.solution.optimum}>
 					{(optimum) => (
 						<>
-							<div class="overflow-x-auto rounded-box border border-base-300">
-								<table class="table table-sm">
+							<div class="overflow-x-auto overscroll-x-contain rounded-box border border-base-300">
+								<table class="table table-xs min-w-max sm:table-sm">
 									<thead>
 										<tr>
 											<th>Punto</th>
@@ -895,7 +895,7 @@ const CurrentNotebook = (props: {
 			when={props.currentStep > 0}
 			fallback={
 				<div class="card bg-base-100 shadow">
-					<div class="card-body gap-4">
+					<div class="card-body gap-4 p-4 sm:p-6">
 						<h2 class="card-title">Planteamiento</h2>
 						<p>Primero escribimos la función objetivo con claridad.</p>
 						<Katex
@@ -1008,7 +1008,7 @@ export const GraphicalLpExplorer = () => {
 	return (
 		<div class="mx-auto max-w-7xl px-4 pt-8 pb-28 lg:pb-8">
 			<section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
-				<div class="space-y-4">
+				<div class="min-w-0 space-y-4">
 					<div class="rounded-box bg-linear-to-br from-info/10 via-base-200 to-primary/10 p-6">
 						<div class="flex flex-wrap items-center justify-between gap-3">
 							<div class="badge badge-primary badge-outline">
@@ -1054,12 +1054,14 @@ export const GraphicalLpExplorer = () => {
 					</Show>
 				</div>
 
-				<aside class="space-y-4 lg:sticky lg:top-4 lg:self-start">
-					<StepControls
-						currentStep={selectedStep()}
-						maxStep={maxStep()}
-						onStepChange={goToStep}
-					/>
+				<aside class="min-w-0 space-y-4 lg:sticky lg:top-4 lg:self-start">
+					<div class="hidden lg:block">
+						<StepControls
+							currentStep={selectedStep()}
+							maxStep={maxStep()}
+							onStepChange={goToStep}
+						/>
+					</div>
 					<Show when={solutionState().solution && currentPlotState()}>
 						<QuickReadingCard
 							solution={

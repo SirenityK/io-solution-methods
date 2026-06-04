@@ -1,6 +1,6 @@
 # "Investigacion de operaciones" solution methods
 
-This webpage contents shall be made in Spanish (MX). But you can think, talk and write your code and comments in English, as long as the user-facing explanations are in Spanish (MX).
+This webpage contents shall be made in Spanish (MX). But you can think, talk to me and write your code and comments in English, as long as the webpage is in made in Spanish (MX).
 
 This website is a static site that offers very verbose step-by-step solutions of multiple algorithms, adapted to a special class in TecNM. The webpage contents shall be made in Spanish (MX).
 
@@ -64,7 +64,7 @@ Write multiple tests/examples so the implemented algorithms are validated agains
 
 The website has its own strict implementation on typescript, ensuring maximum typesafety with type-fest and simple enough reactivity with SolidJS. Styling with TailwindCSS and DaisyUI.
 
-DaisyUI is the primary UI layer. Prefer DaisyUI component, part, modifier, color, and size classes for interface elements such as navbars, menus, buttons, cards, stats, badges, alerts, forms, tables, tabs, footers, and layout shells. Use TailwindCSS utility classes mainly for responsive layout, spacing, sizing, and small adjustments that DaisyUI does not cover. Only build custom component styling when DaisyUI lacks an appropriate component or behavior. When in doubt, consult the official DaisyUI LLM reference at `https://daisyui.com/llms.txt`.
+DaisyUI is the primary UI layer. Prefer DaisyUI component, part, modifier, color, and size classes for interface elements such as navbars, menus, buttons, cards, stats, badges, alerts, forms, tables, tabs, footers, and layout shells. Use TailwindCSS utility classes mainly for responsive layout, spacing, sizing, and small adjustments that DaisyUI does not cover. Only build custom component styling when DaisyUI lacks an appropriate component or behavior. When in doubt, consult the DaisyUI Skill and the LLM reference at `https://daisyui.com/llms.txt`.
 
 The project uses bun and its scripts are listed on the package.json file.
 

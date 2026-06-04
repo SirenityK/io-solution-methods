@@ -89,7 +89,7 @@ const renderTransformation = (transformation: SimplexCellTransformation) => {
 
 export const SimplexTable = (props: SimplexTableProps) => (
 	<div class="card bg-base-100 shadow">
-		<div class="card-body gap-4">
+		<div class="card-body gap-4 p-4 sm:p-6">
 			<div class="flex flex-wrap items-center justify-between gap-3">
 				<h2 class="card-title">{props.title}</h2>
 				<div class="flex flex-wrap gap-2">
@@ -106,8 +106,8 @@ export const SimplexTable = (props: SimplexTableProps) => (
 				</div>
 			</div>
 
-			<div class="overflow-x-auto rounded-box border border-base-300">
-				<table class="table table-zebra">
+			<div class="overflow-x-auto overscroll-x-contain rounded-box border border-base-300">
+				<table class="table table-xs min-w-max table-zebra sm:table-sm">
 					<thead>
 						<tr>
 							<th>Base</th>
