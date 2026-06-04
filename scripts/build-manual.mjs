@@ -1072,5 +1072,5 @@ const outPath = resolve(projectRoot, "manual.html");
 writeFileSync(outPath, html, "utf-8");
 
 const stats = `${(html.length / 1024).toFixed(0)} KB`;
-console.log(`✅ manual.html written (${stats}) → ${outPath}`);
-console.log("   Open in browser → Ctrl+P → Save as PDF");
+console.log(`manual.html written (${stats}) → ${outPath}`);
+console.log(" Open in browser → Ctrl+P → Save as PDF");
