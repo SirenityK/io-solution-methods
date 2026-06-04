@@ -1,62 +1,26 @@
-# IO Solution Methods — Métodos de Solución de Investigación de Operaciones
+# IO Solution Methods
 
-Interactive educational static site for Operations Research solution methods, built for TecNM. Explains transportation problem algorithms, the simplex method, and the graphical LP method step-by-step in Spanish (MX).
+This project is an interactive static site for learning Operations Research solution methods in Spanish (MX), with examples and explanations adapted to a TecNM class.
 
-## Tech Stack
+Its goal is to make each method feel like a careful classroom walkthrough: the user edits a problem, advances through the solution, and sees the important decisions, calculations, tables, plots, candidates, and final result without hidden jumps.
 
-| Technology | Role |
-|---|---|
-| **Astro** 6 | Static site generation |
-| **SolidJS** 1.9 | Reactive frontend components |
-| **TailwindCSS** 4 + **DaisyUI** 5 | Styling and UI components |
-| **KaTeX** 0.17 | Mathematical notation rendering |
-| **D3.js** 7 | SVG plots (graphical LP) |
-| **BiomeJS** 2 | Linting, formatting, and checking |
-| **Bun** | Package manager, dev server, test runner |
+The site currently focuses on:
 
-## Algorithms
+- Transportation problems: Northwest Corner, Least Cost, Vogel Approximation, and MODI-style optimization support.
+- Tabular simplex: tableau iterations, pivot decisions, final basis, objective value, and special statuses.
+- Graphical linear programming: two-variable feasible regions, constraint analysis, vertices, objective evaluation, and geometric status detection.
+- Graphical nonlinear programming: two-variable problems with linear and quadratic-style constraints, candidate derivations, tangencies, strict boundaries, and exact-value explanations where useful.
 
-- **Transportation Problem** — Northwest Corner, Least Cost, Vogel Approximation, MODI optimization, cycle finding
-- **Simplex Method** — Tabular tableau iterations, pivot selection, unbounded/alternate solution detection
-- **Graphical LP** — Two-variable LP with interactive constraint plot, vertex analysis, and feasibility checking
+Executable solution logic lives in typed TypeScript functions under `src/lib`. The frontend consumes those structured results and turns them into Spanish step-by-step explanations with Astro, SolidJS, TailwindCSS, DaisyUI, KaTeX, and D3.
 
-All execution logic lives in pure TypeScript functions in `src/lib/` that produce structured typed data and ordered step traces. Components consume that data and produce Spanish explanations.
+Python scripts in `scripts` are reference material for known examples and validation; the frontend should rely on the TypeScript library logic rather than duplicating algorithm decisions in UI components.
 
-## Project Structure
+## Development
 
-```
-src/
-├── lib/               # Algorithm source of truth (TypeScript)
-│   ├── transportation.ts
-│   ├── simplex.ts
-│   ├── graphical-lp.ts
-│   └── graphical-lp-plot.ts
-├── components/        # SolidJS UI components
-│   ├── transportation/
-│   ├── simplex/
-│   ├── GraphicalLpExplorer.tsx
-│   └── SimplexExplorer.tsx
-├── pages/             # Astro routes
-│   ├── index.astro           # /
-│   ├── transporte.astro      # /transporte
-│   ├── simplex.astro         # /simplex
-│   └── grafico.astro         # /grafico
-├── layouts/
-│   └── BaseLayout.astro
-└── styles/
-    └── global.css
-scripts/               # Python reference implementations
-```
+Use the package scripts for local work:
 
-## Commands
-
-| Command | Action |
-|---|---|
-| `bun install` | Install dependencies |
-| `bun dev` | Start dev server at `localhost:4321` |
-| `bun build` | Build production site to `./dist/` |
-| `bun preview` | Preview production build locally |
-| `bun test` | Run test suite (Bun) |
-| `bun check` | Biome check |
-| `bun autofix` | Biome check --fix |
-| `bun format` | Biome format --write |
+- `bun dev` starts the development server.
+- `bun build` builds the static site.
+- `bun preview` previews the production build.
+- `bun test` runs the Bun test suite.
+- `bun check`, `bun autofix`, and `bun format` run Biome checks and formatting.
